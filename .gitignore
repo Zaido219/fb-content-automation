@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Loose venv files (in case of syntax mix-ups)
+pyvenv.cfg
+Scripts/
+Include/
+Lib/
+
+# Environment variables and secrets
+.env
+.env.local
+*.env
+
+# Local Storage / Output Cache
+storage/transient/*
+!storage/transient/.gitkeep
+storage/approved/*
+!storage/approved/.gitkeep
+
+# Streamlit local runtime state
+.streamlit/
+
+# IDE / Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS metadata
+.DS_Store
+Thumbs.db
