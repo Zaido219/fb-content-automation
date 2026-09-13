@@ -1,5 +1,7 @@
 import os
 import json
+from models.DTO import ImageGenerationPayload
+
 
 class PromptBuilder:
     def __init__(self): 
@@ -43,18 +45,17 @@ class PromptBuilder:
         all_negatives = []
         for category in default_negatives.values():
             all_negatives.extend(category)
-        # creative brief
-        creative_brief = {
-            "prompt": positive_prompt,
-            "negative_prompt": ", ".join(all_negatives),
-            "layout": layout_specs["layouts"][layout_specs["default_layout"]],
-            "metadata": {
-                "project": brand_rules["project_name"],
-                "tone": brand_rules["brand_identity"]["tone"]
-            }
-        }
-        print(creative_brief)
-        return creative_brief
+
+        negative_prompt_str = ", ".join(all_negatives)
+        # Extract aspect ratio from current default layout spec
+        default_layout_key = layout_specs.get("default_layout", "square")
+        aspect_ratio = layout_specs["layouts"][default_layout_key].get("aspect_ratio", "1:1")
+
+        return ImageGenerationPayload(
+            prompt=positive_prompt,
+            negative_prompt=negative_prompt_str,
+            aspect_ratio=aspect_ratio
+        )
 
 
 if __name__ == "__main__":
