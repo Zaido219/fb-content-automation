@@ -12,11 +12,25 @@ class PromptBuilder:
         with open(file_path, 'r') as file:
             return json.load(file)
 
+    def _get_default_negatives(self):
+        file_path = os.path.join(self.base_dir, "config", "default_negatives.json")
+
+        with open(file_path, 'r') as file:
+                return json.load(file)
+
+    def _get_layout_specs(self):
+        file_path = os.path.join(self.base_dir, "config", "layout_specs.json")
+
+        with open(file_path, 'r') as file:
+            return json.load(file)
+
     # method that combines all rules for the imagen api
     def orchestrate(self)->str:
         brand_rules = self._get_brand_rules()
+        defualt_negatives = self._get_default_negatives()
+        layout_specs = self._get_layout_specs()
 
-        print(brand_rules)
+        print(layout_specs)
 
 
 
