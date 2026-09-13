@@ -1,0 +1,50 @@
+{
+  "style_negatives": [
+    "3d render",
+    "cgi",
+    "photorealistic",
+    "hyperrealistic",
+    "vector art",
+    "high contrast",
+    "glossy textures",
+    "smooth airbrushed coloring",
+    "digital painting",
+    "smooth shading",
+    "unreal engine render",
+    "concept art trend on artstation",
+    "cyberpunk aesthetic"
+  ],
+  "structural_negatives": [
+    "modern skyscrapers",
+    "modern cars",
+    "smartphones",
+    "flat screen televisions",
+    "futuristic cityscapes"
+  ],
+  "anatomy_negatives": [
+    "poorly drawn faces",
+    "poorly drawn hands",
+    "extra limbs",
+    "mutated fingers",
+    "deformed anatomy",
+    "cloned faces",
+    "disfigured"
+  ],
+  "image_quality_negatives": [
+    "blurry",
+    "out of focus",
+    "cropped",
+    "out of frame",
+    "low resolution",
+    "pixelated",
+    "compressed artifact"
+  ],
+  "commercial_negatives": [
+    "watermark",
+    "signature",
+    "text",
+    "logo",
+    "username",
+    "copyright notice"
+  ]
+}
