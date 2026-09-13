@@ -48,7 +48,7 @@
   "commercial_negatives": [
     "watermark",
     "signature",
-    "text",
+    "random overlay text",
     "logo",
     "username",
     "copyright notice"

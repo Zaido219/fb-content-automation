@@ -101,7 +101,7 @@ class PromptBuilder:
 if __name__ == "__main__":
     pb = PromptBuilder()
     payload = pb.orchestrate(
-        "Sailor moon riding a jeepney"
+        "Sakuragi and friends, looking for clothes inside an ukay-ukay store"
     )
     print("PROMPT:", payload.prompt)
     print("\nNEGATIVE PROMPT:", payload.negative_prompt)
