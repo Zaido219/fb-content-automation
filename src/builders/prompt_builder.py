@@ -38,10 +38,23 @@ class PromptBuilder:
         brand_rules = self._get_brand_rules()
         default_negatives = self._get_default_negatives()
         layout_specs = self._get_layout_specs()
-        structured_prompt = self._transform_user_query(query)
-        
-        print(f"Final Structured Prompt: {structured_prompt}")
-        return structured_prompt
+        positive_prompt = self._transform_user_query(query)
+
+        all_negatives = []
+        for category in default_negatives.values():
+            all_negatives.extend(default_negatives)
+        # creative brief
+        creative_brief = {
+            "prompt": positive_prompt,
+            "negative_prompt": ", ".join(all_negatives),
+            "layout": layout_specs["layouts"][layout_specs["default_layout"]],
+            "metadata": {
+                "project": brand_rules["project_name"],
+                "tone": brand_rules["brand_identity"]["tone"]
+            }
+        }
+        print(creative_brief)
+        return creative_brief
 
 
 if __name__ == "__main__":
