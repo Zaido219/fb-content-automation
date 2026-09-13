@@ -49,33 +49,3 @@ class ImagenClientWrapper:
             images.append(pil_img)
 
         return images
-
-
-class ImageSaver:
-    """Utility class to separate file persistence logic from API generation logic (SRP)."""
-
-    @staticmethod
-    def save(
-        image: Image.Image, filepath: str, format_type: str = "PNG"
-    ) -> None:
-        os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)
-        image.save(filepath, format=format_type)
-        print(f"Image successfully saved to: {filepath}")
-
-
-# Example usage:
-if __name__ == "__main__":
-    try:
-        # Initialize client (uses GEMINI_API_KEY env var)
-        generator = ImagenClientWrapper()
-
-        prompt = "90s cartoon slice of life setting in the Philippines, high quality, vibrant colors"
-        images = generator.generate_image(
-            prompt=prompt, aspect_ratio="1:1", number_of_images=1
-        )
-
-        if images:
-            ImageSaver.save(images[0], "output/cartoon_scene.png")
-
-    except Exception as e:
-        print(f"Failed to generate image: {e}")
