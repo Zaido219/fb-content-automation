@@ -1,0 +1,57 @@
+{
+  "default_layout": "retro_tv_screencap",
+  "layouts": {
+    "retro_tv_screencap": {
+      "aspect_ratio": "4:3",
+      "target_width": 1440,
+      "target_height": 1080,
+      "description": "Standard 90s TV aspect ratio. Displays beautifully on Facebook without weird cropping, evoking instant nostalgia of vintage CRT monitors.",
+      "letterboxing": {
+        "enabled": false,
+        "color": "#000000"
+      },
+      "subtitle_overlay": {
+        "enabled": true,
+        "font_family": "sans-serif",
+        "font_weight": "bold",
+        "font_color": "#FFD700",
+        "outline_color": "#000000",
+        "outline_width_percent": 1.5,
+        "font_size_percent": 4.5,
+        "bottom_margin_percent": 8.0,
+        "caption_language": "Taglish"
+      }
+    },
+    "facebook_feed_square": {
+      "aspect_ratio": "1:1",
+      "target_width": 1080,
+      "target_height": 1080,
+      "description": "Highly visible square layout. Great for universal feed placements and profile grids.",
+      "letterboxing": {
+        "enabled": true,
+        "color": "#000000",
+        "top_bottom_ratio_percent": 12.5
+      },
+      "subtitle_overlay": {
+        "enabled": true,
+        "font_family": "sans-serif",
+        "font_weight": "bold",
+        "font_color": "#FFFFFF",
+        "outline_color": "#000000",
+        "outline_width_percent": 1.2,
+        "font_size_percent": 4.0,
+        "bottom_margin_percent": 10.0,
+        "caption_language": "Taglish"
+      }
+    }
+  },
+  "imagen_api_overrides": {
+    "output_mime_type": "image/png",
+    "quality_percent": 95,
+    "compression_type": "lossless",
+    "aspect_ratio_param_mapping": {
+      "4:3": "4:3",
+      "1:1": "1:1"
+    }
+  }
+}

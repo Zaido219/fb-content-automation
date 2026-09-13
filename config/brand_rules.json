@@ -1,0 +1,59 @@
+{
+  "project_name": "Batang90",
+  "brand_identity": {
+    "tone": "Nostalgic, Warm, Relatable, Informal",
+    "primary_language": "Taglish (Tagalog-English)",
+    "target_audience": "Filipinos who grew up in the 90s and early 2000s",
+    "core_values": [
+      "Authenticity in Philippine culture",
+      "Respect for original character designs",
+      "Focus on mundane, heartwarming moments (Slice-of-Life)"
+    ]
+  },
+  "content_rules": {
+    "character_list": [
+      "Sailor Moon (Usagi)",
+      "Goku (Dragon Ball)",
+      "Eugene (Yusuke - Ghost Fighter)",
+      "Vincent (Hiei - Ghost Fighter)",
+      "Dennis (Kurama - Ghost Fighter)",
+      "Alfred (Kuwabara - Ghost Fighter)",
+      "Ash Ketchum & Pikachu (Pokemon)",
+      "Hanamichi Sakuragi (Slam Dunk)",
+      "Rukawa (Slam Dunk)",
+      "Doraemon",
+      "Mojacko",
+      "Zenki",
+      "B1 & B2 (Bananas in Pyjamas)"
+    ],
+    "thematic_pillars": [
+      "Street food culture (tusok-tusok, taho, sorbetes)",
+      "Local neighborhood (sari-sari store, kalyeng barangay)",
+      "Public transport (Jeepney, Tricycle)",
+      "90s Childhood games (Tumbang Preso, Piko, Text, Pogs)",
+      "Tropical weather (Sudden downpour, intense summer heat, brownouts)"
+    ],
+    "forbidden_elements": [
+      "Modern smartphones",
+      "Modern high-rise condos",
+      "Contemporary fashion trends",
+      "High-definition digital aesthetics",
+      "Political or controversial local commentary"
+    ]
+  },
+  "copywriting_guidelines": {
+    "caption_templates": [
+      "Yung ganitong hapon tapos {activity}... #Batang90",
+      "Naalala niyo pa ba nung {event}? {character} remembers. #NostalgiaPH",
+      "Chill lang muna sa {location}. #SliceOfLifePH",
+      "POV: Brownout sa inyo tapos ganito ang vibe. #Batang90 #GhostFighter"
+    ],
+    "default_hashtags": [
+      "#Batang90",
+      "#NostalgiaPH",
+      "#Pinoy90s",
+      "#AnimePH",
+      "#SliceOfLife"
+    ]
+  }
+}
