@@ -1,6 +1,6 @@
 import json
 import os
-from models.DTO import ImageGenerationPayload
+from ..models.DTO import ImageGenerationPayload
 
 
 class PromptBuilder:
