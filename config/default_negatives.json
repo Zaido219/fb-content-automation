@@ -19,7 +19,13 @@
     "modern cars",
     "smartphones",
     "flat screen televisions",
-    "futuristic cityscapes"
+    "futuristic cityscapes",
+    "Chinese text",
+    "Japanese text",
+    "Korean text",
+    "Thai text",
+    "Chinese architecture",
+    "Japanese architecture"
   ],
   "anatomy_negatives": [
     "poorly drawn faces",
