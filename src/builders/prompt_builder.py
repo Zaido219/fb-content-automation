@@ -42,7 +42,7 @@ class PromptBuilder:
 
         all_negatives = []
         for category in default_negatives.values():
-            all_negatives.extend(default_negatives)
+            all_negatives.extend(category)
         # creative brief
         creative_brief = {
             "prompt": positive_prompt,
