@@ -34,10 +34,17 @@ class PromptBuilder:
         )
 
         style_directives = (
-            f"Tone: {tone}. 90s retro anime screencap, hand-drawn anime background, "
-            "cel-shaded animation style, vintage aesthetic, warm nostalgic color grading, "
-            "soft analog film grain, VHS screen grab, retro television screenshot."
-        )
+            f"Tone: {tone}. "
+            "Photorealistic background and environment, real-world lighting, natural textures, "
+            "shot on film, authentic location detail, realistic depth of field. "
+            "The character is rendered in a completely different style from the background: "
+            "cel-shaded 90s retro anime style, hand-drawn anime character, flat cel-shading, "
+            "bold clean linework, vintage anime color palette. "
+            "Style contrast: realistic photographic background, 2D animated character composited into it, "
+            "like a cartoon character placed in a real photo. "
+            "Overall grading: warm nostalgic color tone, soft analog film grain, VHS screen grab, "
+            "retro television screenshot look applied evenly across the whole image."
+            )
         return f"{query}. {style_directives}"
 
     def orchestrate(self, query: str) -> ImageGenerationPayload:
