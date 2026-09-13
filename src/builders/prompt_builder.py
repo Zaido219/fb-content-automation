@@ -47,35 +47,43 @@ class PromptBuilder:
             )
         return f"{query}. {style_directives}"
 
+    
+    def _resolve_negative_conflicts(self, positive_prompt: str, negatives: list[str]) -> list[str]:
+        """Removes negative terms that directly contradict something requested in the positive prompt."""
+        positive_lower = positive_prompt.lower()
+        resolved = []
+        for term in negatives:
+            term_lower = term.strip().lower()
+            if term_lower in positive_lower:
+                continue
+            resolved.append(term)
+        return resolved
+
     def orchestrate(self, query: str) -> ImageGenerationPayload:
         brand_rules = self._get_brand_rules()
         default_negatives = self._get_default_negatives()
         layout_specs = self._get_layout_specs()
-
-        # 1. Build positive prompt with brand identity
+    
         positive_prompt = self._transform_user_query(query, brand_rules)
-
-        # 2. Combine default negatives + forbidden brand elements
+    
         all_negatives = []
         for category in default_negatives.values():
             all_negatives.extend(category)
-
-        # Extract forbidden_elements from brand_rules
-        forbidden = (
-            brand_rules.get("content_rules", {}).get("forbidden_elements", [])
-        )
+    
+        forbidden = brand_rules.get("content_rules", {}).get("forbidden_elements", [])
         all_negatives.extend(forbidden)
-
-        negative_prompt_str = ", ".join(all_negatives)
-
-        # 3. Extract layout spec
+    
+        # Strip negatives that contradict what the positive prompt explicitly asks for
+        all_negatives = self._resolve_negative_conflicts(positive_prompt, all_negatives)
+        negative_prompt_str = ", ".join(dict.fromkeys(all_negatives))  # dedupe too
+    
         default_layout_key = layout_specs.get("default_layout", "square")
         aspect_ratio = (
             layout_specs.get("layouts", {})
             .get(default_layout_key, {})
             .get("aspect_ratio", "1:1")
         )
-
+    
         return ImageGenerationPayload(
             prompt=positive_prompt,
             negative_prompt=negative_prompt_str,
