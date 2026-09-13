@@ -32,13 +32,13 @@ class PromptBuilder:
         identity = brand_rules.get("brand_identity", {})
         tone = identity.get("tone", "Nostalgic, Warm")
         language = identity.get("primary_language", "Taglish")
-    
+
         location_directives = (
             "Setting: Philippines, Manila street scene, authentic Filipino signage in Tagalog/Filipino text, "
             "sari-sari store style storefronts, tropical humid atmosphere, Filipino street food cart aesthetic "
             "(not Chinese, not Japanese, not Thai, not Korean signage or architecture)."
         )
-    
+
         style_directives = (
             f"Tone: {tone}. "
             f"{location_directives} "
@@ -101,7 +101,7 @@ class PromptBuilder:
 if __name__ == "__main__":
     pb = PromptBuilder()
     payload = pb.orchestrate(
-        "Goku eating fishballs at a street food cart in Manila"
+        "Sailor moon riding a jeepney"
     )
     print("PROMPT:", payload.prompt)
     print("\nNEGATIVE PROMPT:", payload.negative_prompt)
