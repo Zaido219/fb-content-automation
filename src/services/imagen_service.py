@@ -4,6 +4,7 @@ from typing import Optional
 from PIL import Image
 from google import genai
 from google.genai import types
+from models.DTO import ImageGenerationPayload
 
 
 class ImagenClientWrapper:
@@ -24,22 +25,20 @@ class ImagenClientWrapper:
         self.client = genai.Client(api_key=resolved_key)
         self.model = model
 
-    def generate_image(
+    def generate_image_from_payload(
         self,
-        prompt: str,
-        aspect_ratio: str = "1:1",
-        output_mime_type: str = "image/png",
+        payload: ImageGenerationPayload,
         number_of_images: int = 1,
     ) -> list[Image.Image]:
-        """Sends an image generation request to the Gemini API and returns PIL Image objects."""
         config = types.GenerateImagesConfig(
             number_of_images=number_of_images,
-            aspect_ratio=aspect_ratio,
-            output_mime_type=output_mime_type,
+            aspect_ratio=payload.aspect_ratio,
+            output_mime_type=payload.output_mime_type,
+            negative_prompt=payload.negative_prompt,
         )
 
         response = self.client.models.generate_images(
-            model=self.model, prompt=prompt, config=config
+            model=self.model, prompt=payload.prompt, config=config
         )
 
         images = []
