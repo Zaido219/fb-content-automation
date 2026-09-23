@@ -54,8 +54,11 @@ class FacebookPoster(SocmedInterface):
             # Catch connection errors, timeouts, or raise_for_status failures
             raise GraphAPIError(f"Network request failed: {err}") from err
 
+        return data
+
 
     def publish_post_item(self, message:str, **kwargs):
+        """Post text post"""
         endpoint = f"{self.page_id}/feed"
         payload={"message":message}
         # include optional **kwargs
