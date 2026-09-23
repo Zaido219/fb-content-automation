@@ -2,6 +2,11 @@ import os
 from dotenv import load_dotenv
 from src.exceptions.exceptions import GraphAPIError
 from src.services.facebook_service import FacebookPoster
+from pathlib import Path
+
+
+project_root = Path(__file__).resolve().parent.parent
+image_path = project_root / "storage" / "test_images" / "Gemini_Generated_Image_nwq6sanwq6sanwq6.jpg"
 
 load_dotenv()
 
@@ -18,8 +23,11 @@ if __name__ == "__main__":
     test_message = "Test post from automated pipeline: Text-only connection check."
 
     try:
+        if not image_path.is_file():
+            raise FileNotFoundError(f"Image file not found on: {image_path}")
+        
         print(f"Attempting to post to Page ID: {FB_PAGE_ID}...")
-        response = facebook_poster.publish_post_item(message=test_message)
+        response = facebook_poster.publish_photo_item(image_path, "hello there")
         
         print("Successfully sent request to Facebook API!")
         print(f"API Response Data: {response}")
