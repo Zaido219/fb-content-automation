@@ -1,10 +1,16 @@
 from pathlib import Path
-import streamlit as st
-
 from src.builders.prompt_builder import PromptBuilder
 from src.exceptions.exceptions import GraphAPIError
 from src.services.facebook_service import FacebookPoster
 from src.services.imagen_service import ImagenClientWrapper
+from src.services.storage_service import ImageSaver
+from dotenv import load_dotenv
+import streamlit as st
+import os
+
+load_dotenv()
+
+genai_api_key = os.getenv("GEMINI_API_KEY")
 
 # --- 1. Page Configuration ---
 st.set_page_config(page_title="AI Content Studio", layout="centered")
@@ -51,11 +57,36 @@ generate_btn = st.button(
 )
 
 if generate_btn and user_prompt:
+
+    prompt_builder = PromptBuilder()
+    image_gen = ImagenClientWrapper(genai_api_key)
+    storage_service = ImageSaver()
+
     st.session_state.credits_remaining -= 1
 
-    # Call services (Orchestrate -> Generate -> Save to transient)
-    # TODO: Connect initialized ImagenClientWrapper and StorageService here
-    st.info("Generating candidate image...")
+    with st.spinner("Orchestrating prompt and generating image..."):
+        try:
+            # make the payload
+            payload = prompt_builder.orchestrate(
+                query=user_prompt,
+                session_negative_prompts=st.session_state.session_negative_prompts,
+                few_shot_examples=st.session_state.approved_history
+            )
+            # generate image
+            image_bytes = image_gen.generate_image_from_payload(payload)
+
+            if not image_bytes:
+                raise Exception("Missing image bytes")
+            # persist image and update session state
+            transient_path = storage_service.save(image_bytes)
+            st.session_state.current_image_path = transient_path
+
+            st.success("Candidate image generated!")
+            st.rerun()
+
+        except Exception as e:
+            st.error(f"Generation failed: {e}")
+
 
     # Placeholder simulation for wiring verification:
     # st.session_state.current_image_path = Path("storage/transient/latest.png")
