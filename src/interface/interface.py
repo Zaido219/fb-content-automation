@@ -17,3 +17,8 @@ class SocmedInterface(ABC):
             status).
         """
         pass
+
+
+class AppError(Exception):
+    """Base exception for fb-content-automation."""
+    pass

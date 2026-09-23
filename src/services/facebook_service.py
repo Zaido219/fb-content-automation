@@ -1,6 +1,6 @@
 import requests
 from src.interface.interface import SocmedInterface
-from typing import Optional
+from src.exceptions.exceptions import GraphAPIError
 
 
 class FacebookPoster(SocmedInterface):
@@ -25,13 +25,35 @@ class FacebookPoster(SocmedInterface):
 
         request_payload = payload.copy()
         request_payload["access_token"] = self.access_token
-        # send post request
-        response = self.session.post(url, data=payload, timeout=10)
-        # raise an error if Facebook returns 4xx or 5xx status code
-        parsed_response = response.json9
-        response.raise_for_status()
+        try:
+            response = self.session.post(
+                url,data=request_payload, timeout=10
+            )
+            # first attempt to parse json
+            try:
+                data = response.json()
+            except ValueError:
+                response.raise_for_status()
+                raise GraphAPIError(
+                    f"Unexpected non-JSON response from server (HTTP {response.status_code})"
+                )
+            # check for facebook's explicit json error object
+            if "error" in data:
+                error_info = data["error"]
+                error_msg = error_info.get("message", "Unknwon GraphApi error")
+                error_code = error_info.get("code")
+                # Raise custom exception with API details (works for HTTP 200, 4xx, and 5xx)
+                raise GraphAPIError(
+                    message=f"Facebook API Error [{error_code}]: {error_msg}",
+                    code=error_code,
+                )
+            # Backup check for standard HTTP 4xx/5xx status codes without an "error" key
+            response.raise_for_status()
 
-        return response.json()
+        except requests.exceptions.RequestException as err:
+            # Catch connection errors, timeouts, or raise_for_status failures
+            raise GraphAPIError(f"Network request failed: {err}") from err
+
 
     def publish_post_item(self, message:str, **kwargs):
         endpoint = f"{self.page_id}/feed"
