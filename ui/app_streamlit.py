@@ -12,6 +12,15 @@ load_dotenv()
 
 genai_api_key = os.getenv("GEMINI_API_KEY")
 
+@st.cache_resource
+def load_classes(genai_api_key:str):
+
+    prompt_builder = PromptBuilder()
+    image_gen = ImagenClientWrapper(genai_api_key)
+    storage_service = ImageSaver()
+
+    return prompt_builder, image_gen, storage_service
+
 # --- 1. Page Configuration ---
 st.set_page_config(page_title="AI Content Studio", layout="centered")
 st.title(" Zaido Content Generator & Reviewer")
@@ -58,11 +67,7 @@ generate_btn = st.button(
 
 if generate_btn and user_prompt:
 
-    prompt_builder = PromptBuilder()
-    image_gen = ImagenClientWrapper(genai_api_key)
-    storage_service = ImageSaver()
-
-    st.session_state.credits_remaining -= 1
+    prompt_builder, image_gen, storage_service = load_classes()
 
     with st.spinner("Orchestrating prompt and generating image..."):
         try:
