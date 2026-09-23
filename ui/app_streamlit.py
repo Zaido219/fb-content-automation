@@ -11,6 +11,8 @@ import os
 load_dotenv()
 
 genai_api_key = os.getenv("GEMINI_API_KEY")
+fb_access_token = os.getenv("FB_ACCESS_TOKEN")
+fb_page_id = os.getenv("FB_PAGE_ID")
 
 @st.cache_resource
 def load_classes(genai_api_key:str):
@@ -18,6 +20,7 @@ def load_classes(genai_api_key:str):
     prompt_builder = PromptBuilder()
     image_gen = ImagenClientWrapper(genai_api_key)
     storage_service = ImageSaver()
+    facebook_poster = FacebookPoster(fb_access_token, fb_page_id)
 
     return prompt_builder, image_gen, storage_service
 
@@ -67,7 +70,7 @@ generate_btn = st.button(
 
 if generate_btn and user_prompt:
 
-    prompt_builder, image_gen, storage_service = load_classes()
+    prompt_builder, image_gen, storage_service, facebook_poster = load_classes()
 
     with st.spinner("Orchestrating prompt and generating image..."):
         try:
@@ -107,20 +110,37 @@ if st.session_state.current_image_path:
     col1, col2 = st.columns(2)
 
     # APPROVAL PATH
+   # APPROVAL PATH
     with col1:
         st.success("Approve Output")
         caption = st.text_area("Facebook Post Caption:", value=user_prompt)
+
         if st.button("Approve & Post to Facebook"):
             try:
-                # 1. Move image from storage/transient -> storage/approved
-                # 2. Call facebook_poster.publish_photo_item(approved_path, caption=caption)
-                # 3. Update approved_history memory
-                st.session_state.approved_history.append(user_prompt)
-                st.session_state.current_image_path = None
-                st.balloons()
-                st.success("Posted successfully to Facebook!")
-            except Exception as e:
-                st.error(f"Failed to post: {e}")
+                with st.spinner("Publishing photo to Facebook Page..."):
+                    # 1. Publish candidate image binary using FacebookPoster
+                    response = facebook_poster.publish_photo_item(
+                        image_path=st.session_state.current_image_path,
+                        caption=caption,
+                    )
+
+                    # 2. Append to approved prompt history (sliding window of 7)
+                    st.session_state.approved_history.append(user_prompt)
+                    st.session_state.approved_history = (
+                        st.session_state.approved_history[-7:]
+                    )
+
+                    # 3. Clear active transient image & celebrate
+                    st.session_state.current_image_path = None
+                    st.balloons()
+                    st.success(
+                        f"Successfully posted to Facebook! (Post ID: {response.get('id')})"
+                    )
+
+            except GraphAPIError as err:
+                st.error(f"Facebook Graph API Error: {err}")
+            except Exception as err:
+                st.error(f"Unexpected error while posting: {err}")
 
     # REJECTION PATH
     with col2:
