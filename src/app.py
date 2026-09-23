@@ -1,11 +1,7 @@
 import os
-from pathlib import Path
 from dotenv import load_dotenv
-
-from src.builders.prompt_builder import PromptBuilder
+from src.exceptions.exceptions import GraphAPIError
 from src.services.facebook_service import FacebookPoster
-from src.services.imagen_service import ImagenClientWrapper
-from src.services.storage_service import ImageSaver
 
 load_dotenv()
 
@@ -13,33 +9,26 @@ if __name__ == "__main__":
     FB_ACCESS_TOKEN = os.getenv("FB_ACCESS_TOKEN")
     FB_PAGE_ID = os.getenv("FB_PAGE_ID")
 
-    if not FB_ACCESS_TOKEN:
-        raise ValueError("Missing FB_ACCESS_TOKEN environment variable")
+    if not FB_ACCESS_TOKEN or not FB_PAGE_ID:
+        raise ValueError("Missing required environment variables: FB_ACCESS_TOKEN or FB_PAGE_ID")
 
-    if not FB_PAGE_ID:
-        raise ValueError("Missing FB_PAGE_ID environment variable")
+    print("Initializing FacebookPoster...")
+    facebook_poster = FacebookPoster(access_token=FB_ACCESS_TOKEN, page_id=FB_PAGE_ID)
 
-    builder = PromptBuilder()
-    image_saver = ImageSaver()
-    client = ImagenClientWrapper()
-    facebook_poster = FacebookPoster(FB_ACCESS_TOKEN, FB_PAGE_ID)
+    test_message = "Test post from automated pipeline: Text-only connection check."
 
-    print("Building payload...")
-    payload = builder.orchestrate("Goku eating fishballs at a street food cart in Manila")
+    try:
+        print(f"Attempting to post to Page ID: {FB_PAGE_ID}...")
+        response = facebook_poster.publish_post_item(message=test_message)
+        
+        print("Successfully sent request to Facebook API!")
+        print(f"API Response Data: {response}")
 
-    print("Generating image from Imagen...")
-    images = client.generate_image_from_payload(payload)
+    except GraphAPIError as err:
+        print(f"\n[GraphAPIError] Facebook posting failed:")
+        print(f"Error Message: {err}")
+        if hasattr(err, "code") and err.code:
+            print(f"Error Code: {err.code}")
 
-    # Ensure output path exists
-    project_root = Path(__file__).resolve().parent.parent
-    target_dir = project_root / "storage" / "approved"
-    target_dir.mkdir(parents=True, exist_ok=True)  # Guarantees the directory exists
-
-    output_filepath = target_dir / "goku_fishballs.png"
-
-    if images:
-        # Check whether ImageSaver uses instance or class methods
-        image_saver.save(images[0], str(output_filepath))
-        print(f"Image successfully generated and saved to: {output_filepath}")
-    else:
-        print("Imagen returned no image data.")
+    except Exception as err:
+        print(f"\n[Unexpected Error] {err}")
