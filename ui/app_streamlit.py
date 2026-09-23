@@ -22,7 +22,7 @@ def load_classes(genai_api_key:str):
     storage_service = ImageSaver()
     facebook_poster = FacebookPoster(fb_access_token, fb_page_id)
 
-    return prompt_builder, image_gen, storage_service
+    return prompt_builder, image_gen, storage_service, facebook_poster
 
 # --- 1. Page Configuration ---
 st.set_page_config(page_title="AI Content Studio", layout="centered")
@@ -70,7 +70,7 @@ generate_btn = st.button(
 
 if generate_btn and user_prompt:
 
-    prompt_builder, image_gen, storage_service, facebook_poster = load_classes()
+    prompt_builder, image_gen, storage_service, facebook_poster = load_classes(genai_api_key)
 
     with st.spinner("Orchestrating prompt and generating image..."):
         try:
