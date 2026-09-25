@@ -11,22 +11,31 @@ class PromptBuilder:
             os.path.join(os.path.dirname(__file__), "../../")
         )
 
+    def _load_config_json(self, file_name:str) -> dict:
+        """Load and parse a JSON file from the config directory."""
+
+        if not file_name:
+            raise ValueError("No config file to load")
+        
+        file_path = os.path.join(self.base_dir, "config",file_name)
+
+        try:
+            with open(file_path, "r") as file:
+                return json.load(file)
+        except  FileNotFoundError:
+            raise FileNotFoundError(f"config file not found") from None
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid json in config file: {file_path}") from e
+
     def _get_brand_rules(self) -> dict:
-        file_path = os.path.join(self.base_dir, "config", "brand_rules.json")
-        with open(file_path, "r") as file:
-            return json.load(file)
+        return self._load_config_json("brand_rules.json")
 
     def _get_default_negatives(self) -> dict:
-        file_path = os.path.join(
-            self.base_dir, "config", "default_negatives.json"
-        )
-        with open(file_path, "r") as file:
-            return json.load(file)
+        return self._load_config_json("default_negatives.json")
 
     def _get_layout_specs(self) -> dict:
-        file_path = os.path.join(self.base_dir, "config", "layout_specs.json")
-        with open(file_path, "r") as file:
-            return json.load(file)
+        return self._load_config_json("layout_specs.json")
+    
 
     def _transform_user_query(self, query: str, brand_rules: dict) -> str:
         """Injects visual tone and core brand identity into the positive prompt."""
