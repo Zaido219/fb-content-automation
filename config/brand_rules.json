@@ -11,21 +11,13 @@
     ]
   },
   "content_rules": {
-    "character_list": [
-      "Sailor Moon (Usagi)",
-      "Goku (Dragon Ball)",
-      "Eugene (Yusuke - Ghost Fighter)",
-      "Vincent (Hiei - Ghost Fighter)",
-      "Dennis (Kurama - Ghost Fighter)",
-      "Alfred (Kuwabara - Ghost Fighter)",
-      "Ash Ketchum & Pikachu (Pokemon)",
-      "Hanamichi Sakuragi (Slam Dunk)",
-      "Rukawa (Slam Dunk)",
-      "Doraemon",
-      "Mojacko",
-      "Zenki",
-      "B1 & B2 (Bananas in Pyjamas)"
-    ],
+    "character_list": {
+      "Sailor Moon (Usagi)": "long blonde twin-tail hair with red bows, red sailor collar, blue skirt, red boots",
+      "Goku (Dragon Ball)": "spiky black hair, orange gi with blue undershirt, red wristbands",
+      "Eugene (Yusuke - Ghost Fighter)": "slicked-back dark hair, green school uniform, sharp eyes",
+      "Hanamichi Sakuragi (Slam Dunk)": "red spiky hair, tall lanky build, orange basketball jersey, bandaged forehead",
+      "Rukawa (Slam Dunk)": "dark blue hair, cool expressionless face, red jersey"
+    },
     "thematic_pillars": [
       "Street food culture (tusok-tusok, taho, sorbetes)",
       "Local neighborhood (sari-sari store, kalyeng barangay)",

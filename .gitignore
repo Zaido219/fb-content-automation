@@ -40,3 +40,5 @@ storage/approved/*
 # OS metadata
 .DS_Store
 Thumbs.db
+
+notes.txt
