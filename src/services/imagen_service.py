@@ -28,7 +28,7 @@ class ImagenClientWrapper:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "gemini-3.6-flash",
+        model: str = "gemini-3.1-flash-image",
         fallback_models: Optional[list[str]] = None,
         retries_per_model: int = 2,
     ):
@@ -42,8 +42,8 @@ class ImagenClientWrapper:
 
         # NOTE: every model here must support image output, otherwise it will
         # respond successfully but return no image.
+        # Names taken from client.models.list() for this API key.
         fallbacks = fallback_models or [
-            "gemini-3.1-flash-image",
             "gemini-3.1-flash-lite-image",
             "gemini-2.5-flash-image",
         ]
@@ -85,6 +85,20 @@ class ImagenClientWrapper:
                         contents=full_prompt,
                     )
                 except errors.APIError as e:
+                    # 404 = model name invalid/unsupported: skip to the next model
+                    if e.code == 404:
+                        logger.error("Model %s not found, skipping", model_name)
+                        last_error = e
+                        break
+                    # 429 = quota/rate limit for THIS model. Retrying the same model
+                    # won't help (it can take minutes to hours), so try the next one.
+                    if e.code == 429:
+                        logger.warning(
+                            "%s quota exhausted (429), skipping: %s",
+                            model_name, (e.message or "")[:1200],
+                        )
+                        last_error = e
+                        break
                     if e.code not in RETRYABLE_CODES:
                         raise
                     last_error = e
@@ -104,7 +118,11 @@ class ImagenClientWrapper:
                     return images
 
                 # Model answered but returned no image: move on to the next model.
-                logger.warning("%s returned no image, trying next model", model_name)
+                text = getattr(response, "text", None)
+                logger.warning(
+                    "%s returned no image (text reply: %r), trying next model",
+                    model_name, (text or "")[:200],
+                )
                 break
 
             logger.warning("Giving up on %s, trying next fallback", model_name)
