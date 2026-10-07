@@ -51,7 +51,6 @@ with st.sidebar:
     if st.button("Reset Session State"):
         st.session_state.session_negative_prompts = []
         st.session_state.current_image_path = None
-        st.session_state.credits_remaining = 5
         st.rerun()
 
 # --- 4. Main Generation Form ---
@@ -61,7 +60,7 @@ user_prompt = st.text_input(
 )
 
 generate_btn = st.button(
-    "Generate Image", disabled=(st.session_state.credits_remaining <= 0)
+    "Generate Image"
 )
 
 if generate_btn and user_prompt:
