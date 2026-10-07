@@ -38,13 +38,9 @@ if "approved_history" not in st.session_state:
 if "current_image_path" not in st.session_state:
     st.session_state.current_image_path = None
 
-if "credits_remaining" not in st.session_state:
-    st.session_state.credits_remaining = 5  # Throttling limit per session
-
 # --- 3. Sidebar Status & Controls ---
 with st.sidebar:
     st.header("Session Status")
-    st.metric("Credits Remaining", st.session_state.credits_remaining)
     st.write(
         f"**Active Session Negatives:** {len(st.session_state.session_negative_prompts)}"
     )
