@@ -43,9 +43,9 @@ class ImagenClientWrapper:
         # NOTE: every model here must support image output, otherwise it will
         # respond successfully but return no image.
         fallbacks = fallback_models or [
-            "gemini-3.5-flash",
-            "gemini-3.5-flash-lite",
-            "gemini-3.1-pro",
+            "gemini-3.1-flash-image",
+            "gemini-3.1-flash-lite-image",
+            "gemini-2.5-flash-image",
         ]
 
         # Primary first, then fallbacks, without duplicates, order preserved.
