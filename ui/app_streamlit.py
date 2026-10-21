@@ -70,7 +70,7 @@ if generate_btn and user_prompt:
     with st.spinner("Orchestrating prompt and generating image..."):
         try:
             # make the payload
-            payload = prompt_builder.orchestrate(
+            payload = prompt_builder.build_prompt(
                 query=user_prompt,
                 session_negative_prompts=st.session_state.session_negative_prompts,
                 few_shot_examples=st.session_state.approved_history

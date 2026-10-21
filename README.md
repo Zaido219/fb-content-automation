@@ -21,7 +21,7 @@ It also builds a negative prompt from a few sources: default negatives, blocked 
 The flow is simple:
 
 1. A user enters a content idea in the Streamlit UI.
-2. `PromptBuilder.orchestrate()` loads the JSON config and assembles a positive prompt.
+2. `PromptBuilder.build_prompt()` loads the JSON config and assembles a positive prompt.
 3. It injects relevant thematic pillars, like street food, local neighborhood life, jeepneys, and 90s childhood games, when they match the request.
 4. It also checks for known characters in the query and adds design notes so the character stays recognizable.
 5. The prompt and negative prompt are passed to `ImagenClientWrapper`, which calls the Google AI image generation API.

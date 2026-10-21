@@ -113,7 +113,7 @@ class PromptBuilder:
             resolved.append(term)
         return resolved
 
-    def orchestrate(
+    def build_prompt(
         self,
         query: str,
         session_negative_prompts: Optional[List[str]] = None,
@@ -184,7 +184,7 @@ class PromptBuilder:
 
 if __name__ == "__main__":
     pb = PromptBuilder()
-    payload = pb.orchestrate(
+    payload = pb.build_prompt(
         "Sakuragi and friends, looking for clothes inside an ukay-ukay store"
     )
     print("PROMPT:", payload.prompt)
