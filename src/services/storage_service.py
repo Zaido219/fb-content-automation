@@ -2,6 +2,8 @@ import io
 from pathlib import Path
 from typing import Union
 from PIL import Image
+import secrets
+import string
 
 
 class ImageSaver:
@@ -10,10 +12,11 @@ class ImageSaver:
     @staticmethod
     def save(
         image_data: Union[bytes, Image.Image],
-        filepath: Union[str, Path] = "storage/transient/candidate.png",
         format_type: str = "PNG",
     ) -> Path:
         """Saves PIL Image or raw image bytes to disk and returns the verified Path object."""
+        filename = f"{ImageSaver._generate_filename()}.png" #this line assume that we will forever be using png's
+        filepath: Union[str, Path] = f"storage/transient/{filename}",
         target_path = Path(filepath).resolve()
         
         # Guarantee parent directory exists
@@ -35,3 +38,10 @@ class ImageSaver:
         except Exception as e:
             print(f"Something wrong happened while saving file: {e}")
             raise e
+    
+    @staticmethod
+    def _generate_filename() -> str:
+        """Private method to generate randomized file name"""
+        alphabet = string.ascii_letters + string.digits
+        random_string = ''.join(secrets.choice(alphabet) for _ in range(16))
+        return random_string
