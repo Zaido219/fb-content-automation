@@ -1,6 +1,20 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Union
 from pathlib import Path
+from PIL import Image
+from src.models.DTO import ImageGenerationPayload
+
+
+class ImageInterface(ABC):
+    @abstractmethod
+    def _extract_images(response:str) ->  list[Image.Image]:
+        pass
+
+    @abstractmethod
+    def generate_image_from_payload(payload:ImageGenerationPayload) ->  list[Image.Image]:
+        pass
+
+
 
 # allows for broader platform support in the future
 class SocmedInterface(ABC):

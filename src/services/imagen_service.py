@@ -28,7 +28,7 @@ class ImagenClientWrapper:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "gemini-3.1-flash-image",
+        model: str = "gemini-3.8-flash-image",
         fallback_models: Optional[list[str]] = None,
         retries_per_model: int = 2,
     ):
