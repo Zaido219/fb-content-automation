@@ -103,7 +103,7 @@ if st.session_state.current_image_path:
     st.subheader("Review Candidate Output")
 
     # Display transient image
-    st.image(str(st.session_state.current_image_path), use_column_width=True)
+    st.image(str(st.session_state.current_image_path), use_container_width=True)
 
     col1, col2 = st.columns(2)
 
