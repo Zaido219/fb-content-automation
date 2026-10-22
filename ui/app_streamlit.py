@@ -24,9 +24,12 @@ def load_classes(genai_api_key:str):
     # for compatibilty same object name is used.
     image_gen = CloudflareImageClientWrapper()
     storage_service = ImageSaver()
-    facebook_poster = FacebookPoster(fb_access_token, fb_page_id)
 
-    return prompt_builder, image_gen, storage_service, facebook_poster
+    return prompt_builder, image_gen, storage_service
+
+@st.cache_resource
+def load_facebook_poster(access_token: str | None, page_id: str | None) -> FacebookPoster:
+    return FacebookPoster(access_token, page_id)
 
 # --- 1. Page Configuration ---
 st.set_page_config(page_title="AI Content Studio", layout="centered")
@@ -69,7 +72,7 @@ generate_btn = st.button(
 
 if generate_btn and user_prompt:
 
-    prompt_builder, image_gen, storage_service, facebook_poster = load_classes(genai_api_key)
+    prompt_builder, image_gen, storage_service = load_classes(genai_api_key)
 
     with st.spinner("Orchestrating prompt and generating image..."):
         try:
@@ -115,6 +118,7 @@ if st.session_state.current_image_path:
 
         if st.button("Approve & Post to Facebook"):
             try:
+                facebook_poster = load_facebook_poster(fb_access_token, fb_page_id)
                 with st.spinner("Publishing photo to Facebook Page..."):
                     # 1. Publish candidate image binary using FacebookPoster
                     response = facebook_poster.publish_photo_item(
