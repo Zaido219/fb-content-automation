@@ -2,7 +2,7 @@ from pathlib import Path
 from src.builders.prompt_builder import PromptBuilder
 from src.exceptions.exceptions import GraphAPIError
 from src.services.facebook_service import FacebookPoster
-from src.services.imagen_service import ImagenClientWrapper
+from src.services.imagen_service import ImagenClientWrapper, CloudflareImageClientWrapper
 from src.services.storage_service import ImageSaver
 from dotenv import load_dotenv
 import streamlit as st
@@ -18,7 +18,11 @@ fb_page_id = os.getenv("FB_PAGE_ID")
 def load_classes(genai_api_key:str):
 
     prompt_builder = PromptBuilder()
-    image_gen = ImagenClientWrapper(genai_api_key)
+    # image_gen = ImagenClientWrapper(genai_api_key) #if this is commented it means another models is being used
+    # when using CloudflareImageClientWrapper api key doesnt have to be explicitly provided
+    # that is being handled inside the class itself. Constructors can also accepts an api key though.
+    # for compatibilty same object name is used.
+    image_gen = CloudflareImageClientWrapper()
     storage_service = ImageSaver()
     facebook_poster = FacebookPoster(fb_access_token, fb_page_id)
 
