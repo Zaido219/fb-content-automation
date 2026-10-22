@@ -16,7 +16,7 @@ class ImageSaver:
     ) -> Path:
         """Saves PIL Image or raw image bytes to disk and returns the verified Path object."""
         filename = f"{ImageSaver._generate_filename()}.png" #this line assume that we will forever be using png's
-        filepath: Union[str, Path] = f"storage/transient/{filename}",
+        filepath: Union[str, Path] = f"storage/transient/{filename}"
         target_path = Path(filepath).resolve()
         
         # Guarantee parent directory exists
