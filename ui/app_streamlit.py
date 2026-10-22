@@ -79,13 +79,12 @@ if generate_btn and user_prompt:
                 session_negative_prompts=st.session_state.session_negative_prompts,
                 few_shot_examples=st.session_state.approved_history
             )
-            # generate image
-            image_bytes = image_gen.generate_image_from_payload(payload)
-
-            if not image_bytes:
-                raise Exception("Missing image bytes")
+            # generate image(s)
+            images = image_gen.generate_image_from_payload(payload)
+            if not images:
+                raise Exception("No images were returned")
             # persist image and update session state
-            transient_path = storage_service.save(image_bytes)
+            transient_path = storage_service.save(images[0])
             st.session_state.current_image_path = transient_path
 
             st.success("Candidate image generated!")
