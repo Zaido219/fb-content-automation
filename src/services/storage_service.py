@@ -9,6 +9,8 @@ import string
 class ImageSaver:
     """Utility class to separate file persistence logic from API generation logic (SRP)."""
 
+    _MAX_TRANSIENT_IMAGES = 3
+
     @staticmethod
     def save(
         image_data: Union[bytes, Image.Image],
@@ -32,12 +34,24 @@ class ImageSaver:
                 raise TypeError(f"Unsupported image_data type: {type(image_data)}")
 
             image.save(target_path, format=format_type)
+            ImageSaver._limit_transient_images(target_path.parent)
             print(f"Image successfully saved to: {target_path}")
             return target_path
 
         except Exception as e:
             print(f"Something wrong happened while saving file: {e}")
             raise e
+
+    @staticmethod
+    def _limit_transient_images(directory: Path) -> None:
+        """Remove the oldest PNG files so the transient folder keeps at most three."""
+        images = sorted(
+            (path for path in directory.glob("*.png") if path.is_file()),
+            key=lambda path: (path.stat().st_mtime, path.name),
+        )
+        excess_count = len(images) - ImageSaver._MAX_TRANSIENT_IMAGES
+        for image_path in images[:max(0, excess_count)]:
+            image_path.unlink()
     
     @staticmethod
     def _generate_filename() -> str:
