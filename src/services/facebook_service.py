@@ -67,7 +67,11 @@ class FacebookPoster(SocmedInterface):
             raise FileNotFoundError(f"Image file not found at path: {path}")
 
         endpoint = f"{self.page_id}/photos"
-        payload = {"caption": caption}
+        disclosure = "This content was generated using AI."
+        disclosed_caption = (
+            f"{caption.rstrip()}\n\n{disclosure}" if caption.strip() else disclosure
+        )
+        payload = {"caption": disclosed_caption}
         payload.update(kwargs)
         # Context manager guarantees file stream closes safely after _make_request completes or fails
         with open(path, "rb") as image_file:
