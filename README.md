@@ -76,6 +76,10 @@ The main files to look at are:
 - `src/services/facebook_service.py` for posting to Facebook
 - `ui/app_streamlit.py` for the local review workflow
 
+The brand rules config also owns the required `style_directives` text used in
+each generated prompt. The prompt builder validates the config structures it
+consumes and reports malformed settings before attempting image generation.
+
 ## Setup and installation
 
 I usually work in a virtual environment.
