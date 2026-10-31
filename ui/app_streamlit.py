@@ -45,6 +45,9 @@ if "approved_history" not in st.session_state:
 if "current_image_path" not in st.session_state:
     st.session_state.current_image_path = None
 
+if "regenerate_requested" not in st.session_state:
+    st.session_state.regenerate_requested = False
+
 # --- 3. Sidebar Status & Controls ---
 with st.sidebar:
     st.header("Session Status")
@@ -58,6 +61,7 @@ with st.sidebar:
     if st.button("Reset Session State"):
         st.session_state.session_negative_prompts = []
         st.session_state.current_image_path = None
+        st.session_state.regenerate_requested = False
         st.rerun()
 
 # --- 4. Main Generation Form ---
@@ -70,8 +74,11 @@ generate_btn = st.button(
     "Generate Image"
 )
 
-if generate_btn and user_prompt:
+generation_requested = generate_btn or st.session_state.regenerate_requested
+if generation_requested:
+    st.session_state.regenerate_requested = False
 
+if generation_requested and user_prompt:
     prompt_builder, image_gen, storage_service = load_classes(genai_api_key)
 
     with st.spinner("Orchestrating prompt and generating image..."):
@@ -160,5 +167,7 @@ if st.session_state.current_image_path:
                     rejection_reason
                 )
                 st.session_state.current_image_path = None
-                st.warning("Feedback recorded. Retrying generation...")
+                st.session_state.regenerate_requested = True
                 st.rerun()
+            else:
+                st.error("Enter a rejection reason before refining.")
