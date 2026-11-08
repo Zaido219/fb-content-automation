@@ -17,22 +17,11 @@ class ImageSaver:
         format_type: str = "PNG",
     ) -> Path:
         """Saves PIL Image or raw image bytes to disk and returns the verified Path object."""
-        filename = f"{ImageSaver._generate_filename()}.png" #this line assume that we will forever be using png's
-        filepath: Union[str, Path] = f"storage/transient/{filename}"
-        target_path = Path(filepath).resolve()
-        
-        # Guarantee parent directory exists
-        target_path.parent.mkdir(parents=True, exist_ok=True)
+        filename = ImageSaver._name_file(format_type)
 
         try:
-            if isinstance(image_data, bytes):
-                # Convert raw API bytes into a PIL Image instance
-                image = Image.open(io.BytesIO(image_data))
-            elif isinstance(image_data, Image.Image):
-                image = image_data
-            else:
-                raise TypeError(f"Unsupported image_data type: {type(image_data)}")
-
+            target_path = ImageSaver._create_directory(filename)
+            image = ImageSaver._normalize_image(image_data)
             image.save(target_path, format=format_type)
             ImageSaver._limit_transient_images(target_path.parent)
             print(f"Image successfully saved to: {target_path}")
@@ -42,6 +31,34 @@ class ImageSaver:
             print(f"Something wrong happened while saving file: {e}")
             raise e
 
+
+    @staticmethod
+    def _create_directory(filename:str):
+            directory = Path("storage/transient")
+            directory.mkdir(parents=True,exist_ok=True)
+
+            return directory / filename
+
+    @staticmethod
+    def _name_file(format_type:str):
+        filename = f"{ImageSaver._generate_filename()}.{format_type.lower()}"
+        
+        return filename 
+
+
+    @staticmethod
+    def _normalize_image(image_data) :
+        if isinstance(image_data, bytes):
+            # Convert raw API bytes into a PIL Image instance
+            image = Image.open(io.BytesIO(image_data))
+        elif isinstance(image_data, Image.Image):
+            image = image_data
+        else:
+            raise TypeError(f"Unsupported image_data type: {type(image_data)}")
+
+        return image
+
+        
     @staticmethod
     def _limit_transient_images(directory: Path) -> None:
         """Remove the oldest PNG files so the transient folder keeps at most three."""
