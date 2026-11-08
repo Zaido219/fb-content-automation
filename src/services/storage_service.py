@@ -19,17 +19,17 @@ class ImageSaver:
         """Saves PIL Image or raw image bytes to disk and returns the verified Path object."""
         filename = ImageSaver._name_file(format_type)
 
-        try:
-            target_path = ImageSaver._create_directory(filename)
-            image = ImageSaver._normalize_image(image_data)
-            image.save(target_path, format=format_type)
-            ImageSaver._limit_transient_images(target_path.parent)
-            print(f"Image successfully saved to: {target_path}")
-            return target_path
+        target_path = ImageSaver._create_directory(filename)
+        image = ImageSaver._normalize_image(image_data)
 
-        except Exception as e:
-            print(f"Something wrong happened while saving file: {e}")
-            raise e
+        try:
+            image.save(target_path, format=format_type)
+        except Exception as exc:
+            raise RuntimeError(f"Failed to save image to {target_path}") from exc
+        
+        ImageSaver._limit_transient_images(target_path.parent)
+        print(f"Image successfully saved to: {target_path}")
+        return target_path
 
 
     @staticmethod
