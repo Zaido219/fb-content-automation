@@ -77,6 +77,4 @@ class ImageSaver:
     @staticmethod
     def _generate_filename() -> str:
         """Private method to generate randomized file name"""
-        alphabet = string.ascii_letters + string.digits
-        random_string = ''.join(secrets.choice(alphabet) for _ in range(16))
-        return random_string
+        return secrets.token_hex(8)
