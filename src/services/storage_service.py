@@ -60,10 +60,14 @@ class ImageSaver:
 
         
     @staticmethod
-    def _limit_transient_images(directory: Path) -> None:
-        """Remove the oldest PNG files so the transient folder keeps at most three."""
+    def _limit_transient_images(directory: Path, extension: set[str] | None = None) -> None:
+        allowed_extensions = extension or {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif"}
+
         images = sorted(
-            (path for path in directory.glob("*.png") if path.is_file()),
+            (
+                path for path in directory.iterdir()
+                if path.is_file() and path.suffix.lower() in allowed_extensions 
+            ),
             key=lambda path: (path.stat().st_mtime, path.name),
         )
         excess_count = len(images) - ImageSaver._MAX_TRANSIENT_IMAGES
